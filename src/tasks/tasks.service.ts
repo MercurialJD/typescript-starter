@@ -11,37 +11,12 @@ export class TasksService {
   ) {}
 
   /**
-   * Convert a given task ID from string to number.
-   *
-   * @param id - The task ID as a string.
-   * @returns - The task ID as a number.
-   * @throws - BadRequestException if the ID is not a valid integer.
-   */
-  convertIdToInt(id: string): number {
-    const taskId = parseInt(id, 10);
-    if (taskId.toString() !== id) {
-      throw new BadRequestException('Invalid task ID.');
-    }
-
-    return taskId;
-  }
-
-  /**
    * Create a new task with the given information.
    *
    * @param task - An object containing the title, description (optional), and status of the new task.
    * @returns - The created task.
-   * @throws - BadRequestException if the title or status is invalid.
    */
   async createTask(task: Partial<Task>): Promise<Task> {
-    if (!task.title) {
-      throw new BadRequestException('Title is required.');
-    }
-
-    if (!task.status || !Object.values(TaskStatus).includes(task.status)) {
-      throw new BadRequestException('Invalid status.');
-    }
-
     const newTask = this.tasksRepository.create(task);
     return await this.tasksRepository.save(newTask);
   }
@@ -51,13 +26,11 @@ export class TasksService {
    *
    * @param id - The ID of the task to retrieve.
    * @returns - The requested task.
-   * @throws - BadRequestException if the ID is invalid.
-   *           NotFoundException if the task is not found.
+   * @throws - NotFoundException if the task is not found.
    */
-  async getTaskById(id: string): Promise<Task> {
-    const taskId = this.convertIdToInt(id);
+  async getTaskById(id: number): Promise<Task> {
     const task = await this.tasksRepository.findOneBy({
-        id: taskId
+        id: id,
     });
 
     if (!task) {
@@ -72,12 +45,10 @@ export class TasksService {
    *
    * @param id - The ID of the task to delete.
    * @returns - An object containing a success message.
-   * @throws - BadRequestException if the ID is invalid.
-   *           NotFoundException if the task is not found.
+   * @throws - NotFoundException if the task is not found.
    */
-  async deleteTaskById(id: string): Promise<{ message: string }> {
-    const taskId = this.convertIdToInt(id);
-    const result = await this.tasksRepository.delete(taskId);
+  async deleteTaskById(id: number): Promise<{ message: string }> {
+    const result = await this.tasksRepository.delete(id);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID ${id} not found.`);

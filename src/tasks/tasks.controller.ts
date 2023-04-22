@@ -1,6 +1,23 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, BadRequestException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { Task } from './tasks.entity';
+import { Task, TaskStatus } from './tasks.entity';
+
+
+  /**
+   * Convert a given task ID from string to number.
+   *
+   * @param id - The task ID as a string.
+   * @returns - The task ID as a number.
+   * @throws - BadRequestException if the ID is not a valid integer.
+   */
+export function convertIdToInt(id: string): number {
+  const taskId = parseInt(id, 10);
+  if (taskId.toString() !== id) {
+    throw new BadRequestException('Invalid task ID.');
+  }
+
+  return taskId;
+}
 
 @Controller('tasks')
 export class TasksController {
@@ -11,9 +28,18 @@ export class TasksController {
    *
    * @param task - An object containing the title, description (optional), and status of the new task.
    * @returns - The created task.
+   * @throws - BadRequestException if the title or status is invalid.
    */
   @Post()
   async createTask(@Body() task: Partial<Task>): Promise<Task> {
+    if (!task.title) {
+      throw new BadRequestException('Title is required.');
+    }
+
+    if (!task.status || !Object.values(TaskStatus).includes(task.status)) {
+      throw new BadRequestException('Invalid status.');
+    }
+
     return await this.tasksService.createTask(task);
   }
 
@@ -22,10 +48,12 @@ export class TasksController {
    *
    * @param id - The ID of the task to retrieve.
    * @returns - The requested task.
+   * @throws - BadRequestException if the ID is invalid.
    */
   @Get(':id')
   async getTaskById(@Param('id') id: string): Promise<Task> {
-    return await this.tasksService.getTaskById(id);
+    const taskId = convertIdToInt(id);
+    return await this.tasksService.getTaskById(taskId);
   }
 
   /**
@@ -33,10 +61,12 @@ export class TasksController {
    *
    * @param id - The ID of the task to delete.
    * @returns - An object containing a success message.
+   * @throws - BadRequestException if the ID is invalid.
    */
   @Delete(':id')
   async deleteTaskById(@Param('id') id: string): Promise<{ message: string }> {
-    return await this.tasksService.deleteTaskById(id);
+    const taskId = convertIdToInt(id);
+    return await this.tasksService.deleteTaskById(taskId);
   }
 }
 
