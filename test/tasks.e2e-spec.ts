@@ -49,6 +49,7 @@ describe('Tasks E2E Test', () => {
           expect(body.title).toEqual(task.title);
           expect(body.description).toEqual(task.description);
           expect(body.status).toEqual(task.status);
+          expect(body.createdAt).toEqual(body.updatedAt);
         });
     });
 
@@ -153,13 +154,13 @@ describe('Tasks E2E Test', () => {
         .expect(201);
 
       return request(app.getHttpServer())
-        .get(`/tasks/${createdTask.id + 1000}`)
+        .delete(`/tasks/${createdTask.id + 1000}`)
         .expect(404);
     });
 
     it('should throw a 400 error for an NaN ID', async () => {
       return request(app.getHttpServer())
-        .get(`/tasks/not-a-number`)
+        .delete(`/tasks/not-a-number`)
         .expect(400);
     });
   })
