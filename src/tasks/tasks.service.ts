@@ -30,7 +30,7 @@ export class TasksService {
    */
   async getTaskById(id: number): Promise<Task> {
     const task = await this.tasksRepository.findOneBy({
-        id: id,
+      id: id,
     });
 
     if (!task) {

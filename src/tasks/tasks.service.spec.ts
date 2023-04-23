@@ -33,6 +33,7 @@ describe('TasksService', () => {
     expect(tasksService).toBeDefined();
   });
 
+  // Unit tests for service createTask
   describe('createTask', () => {
     it('should create a task without description and return it', async () => {
       const mockTask: Partial<Task> = {
@@ -81,6 +82,7 @@ describe('TasksService', () => {
     });
   });
 
+  // Unit tests for service getTaskById
   describe('getTaskById', () => {
     it('should call the repository findOnBy method and return the found task', async () => {
       const taskId = 3;
@@ -107,6 +109,7 @@ describe('TasksService', () => {
     });
   });
 
+  // Unit tests for service deleteTaskById
   describe('deleteTaskById', () => {
     it('should call the repository delete method and return the success message', async () => {
       const taskId = 1;
