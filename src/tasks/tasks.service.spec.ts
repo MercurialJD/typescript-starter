@@ -125,6 +125,8 @@ describe('TasksService', () => {
     it('should throw an error when the delete id doesn\'t exist', async () => {
       const nonExistId = 100;
 
+      mockTasksRepository.delete.mockResolvedValue({ affected: 0 });
+
       await expect(tasksService.deleteTaskById(nonExistId)).rejects.toThrowError();
     });
   });
