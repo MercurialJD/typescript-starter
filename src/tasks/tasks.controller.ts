@@ -53,11 +53,7 @@ export class TasksController {
       throw new BadRequestException('Title is required.');
     }
 
-    if (!task.status) {
-      throw new BadRequestException('Status is required.');
-    }
-
-    if (!Object.values(TaskStatus).includes(task.status)) {
+    if (!task.status || !Object.values(TaskStatus).includes(task.status)) {
       throw new BadRequestException('Invalid status.');
     }
 
