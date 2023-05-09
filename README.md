@@ -24,9 +24,38 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a [Nest](https://github.com/nestjs/nest) framework Feature Enhancement Assignment. This assignment implements a new feature to manage a collection of tasks, each task has the following properties:
 
-## Installation
+- `id`: unique identifier, auto-generated
+- `title`: string, required
+- `description`: string, optional
+- `status`: enum, required: ['TODO', 'IN_PROGRESS', 'COMPLETED']
+- `createdAt`: date, auto-generated
+- `updatedAt`: date, auto-generated
+
+This assignment implements the following operations:
+- Create a new task (POST)
+- Retrieve a task by its `id` (GET)
+- Delete a task by its `id` (DELETE)
+
+## Files
+
+The folder `src/tasks` contains implementation and unit tests for the new module `TasksModule`, which contains the following files:
+- The file `tasks.entity.ts` defines `Task` and `TaskStatus`.
+- The file `tasks.controller.ts` validates the parameters and implements routing for the 3 RESTful APIs (POST, GET, DELETE).
+- The file `tasks.service.ts` implements logics for task storage and query.
+- The file `tasks.controller.spec.ts` contains unit tests for the controller, implemented with Jest.
+- The file `tasks.service.spec.ts` contains unit tests for the provider, implemented with Jest.
+
+The E2E tests are placed under the `test` folder, which connects to a PostgreSQL database and runs E2E tests automatically.
+
+## Prerequisites
+1. Install the PostgreSQL, create a database called "Tasks".
+2. Install Node.js and npm.
+3. Install the Nest.js CLI.
+4. Tools to test the APIs, e.g. Postman.
+
+## Assignment Installation
 
 ```bash
 $ npm install
@@ -51,22 +80,30 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
+# unit tests coverage
+$ npm run test:cov
+
 # e2e tests
 $ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+# e2e tests coverage
+$ npm run test:e2e:cov
 ```
+**Note:**
+1. When checking the coverage for unit tests, it would complain about `*.module.ts`, but was suggested to ignore them and test those files in the E2E tests.
+2. When checking the coverage for E2E tests, line 5 of `tasks.entity.ts` was marked as uncovered. That was an imported decorator, seems unnecessary to write tests specifically for it.
 
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- This assignment
+  - Author - [Junda Shen](https://shenjunda.com)
+- Original framework
+  - Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+  - Website - [https://nestjs.com](https://nestjs.com/)
+  - Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
